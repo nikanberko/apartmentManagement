@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ApartmentRepository extends JpaRepository<Apartment, Integer> {
 
-    boolean existsByApartmentName(String name);
+    boolean existsByName(String name);
 
-    Apartment findByApartmentName(String name);
+    Apartment findByName(String name);
 
     @Transactional
     void deleteById(Integer id);
