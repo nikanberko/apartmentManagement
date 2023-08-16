@@ -8,16 +8,10 @@ import javax.validation.constraints.Size;
 
 import java.util.List;
 
-
-@Entity
 @Data // Create getters and setters
 @NoArgsConstructor
 @AllArgsConstructor
-public class Apartment {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class AddApartmentDTO {
 
     @Size(min = 4, max = 255, message = "Minimum apartment name length: 4 characters")
     @Column(unique = true, nullable = false)
