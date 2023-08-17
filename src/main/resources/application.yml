@@ -1,27 +1,20 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:test_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    # url: jdbc:mysql://localhost:3306/user_db
-    username: root
-    password: root
-  tomcat:
-    max-wait: 20000
-    max-active: 50
-    max-idle: 20
-    min-idle: 15
+    password: admin
+    url: jdbc:postgresql://localhost:5432/registration
+    username: admin
   jpa:
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        # dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-        id:
-          new_generator_mappings: false
+    show-sql: true
+
 
 server:
-  port: 8080
+  port: 8081
 
 ApartmentManagementController:
   addApartment: Authenticates user and returns its JWT token.

@@ -20,15 +20,15 @@ public class ApartmentManagementService {
       return apartmentRepository.findAll();
     }
 
-    public Apartment addApartment(AddApartmentDTO addApartmentDTO){
-        return apartmentRepository.save(ApartmentMapper.mapToApartment(addApartmentDTO));
+    public Apartment addApartment(AddApartmentDTO addApartmentDTO, String username) throws RuntimeException{
+        return apartmentRepository.save(ApartmentMapper.mapToApartment(addApartmentDTO, username));
     }
 
     public void deleteApartment(Integer apartmentId){
          apartmentRepository.deleteById(apartmentId);
     }
 
-    public Optional<Apartment> getApartmentbyId(Integer apartmentId){
+    public Optional<Apartment> getApartmentById(Integer apartmentId){
         return apartmentRepository.findById(apartmentId);
     }
 

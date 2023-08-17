@@ -25,7 +25,6 @@ public class AddApartmentDTO {
 
     @Column(unique = false, nullable = false)
     private Integer numberOfBeds;
-
 }
 
 
