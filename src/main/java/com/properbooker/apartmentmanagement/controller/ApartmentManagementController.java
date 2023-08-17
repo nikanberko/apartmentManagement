@@ -4,8 +4,10 @@ package com.properbooker.apartmentmanagement.controller;
 import com.properbooker.apartmentmanagement.message.ResponseMessage;
 import com.properbooker.apartmentmanagement.model.AddApartmentDTO;
 import com.properbooker.apartmentmanagement.model.Apartment;
+import com.properbooker.apartmentmanagement.repository.ApartmentRepository;
 import com.properbooker.apartmentmanagement.security.TokenProvider;
 import com.properbooker.apartmentmanagement.service.ApartmentManagementService;
+import com.properbooker.apartmentmanagement.utils.ApartmentMapper;
 import io.swagger.annotations.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 //http://localhost:8080/swagger-ui/index.html
 @RestController
@@ -26,13 +30,25 @@ public class ApartmentManagementController {
     private final TokenProvider tokenProvider;
     private final ApartmentManagementService apartmentManagementService;
 
+    private final ApartmentRepository apartmentRepository;
+
     @GetMapping("/getall")
     @ApiOperation(value = "${ApartmentController.getAllApartments}")
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied")})
-    public List<Apartment> getAllApartments() {
-        return apartmentManagementService.getAllApartments();
+    public ResponseEntity<List<AddApartmentDTO>> getAllApartments( HttpServletRequest request) throws RuntimeException {
+        String token = request.getHeader("Authorization");
+        if (token == null || !token.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ArrayList<>());
+        }
+        token = token.replace("Bearer ", "");
+        String username = tokenProvider.getUsernameFromToken(token);
+        List<AddApartmentDTO> apartments = apartmentRepository.findAllByUsername(username).stream()
+                .map(ApartmentMapper::mapToAddApartmentDTO) // Assuming ApartmentMapper is a class with the mapping logic
+                .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(apartments);
+
     }
 
     @PostMapping("/add")
@@ -53,7 +69,7 @@ public class ApartmentManagementController {
 
         try {
             username = tokenProvider.getUsernameFromToken(token);
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseMessage("Invalid user ID in token"));
         }
         String message = "";
