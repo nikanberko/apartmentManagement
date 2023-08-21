@@ -32,7 +32,7 @@ public class Apartment {
     @Column(unique = false, nullable = false)
     private Integer numberOfBeds;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = false, nullable = false)
     private String username;
 
 }

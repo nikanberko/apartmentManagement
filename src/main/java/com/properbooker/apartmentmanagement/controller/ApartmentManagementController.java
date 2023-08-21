@@ -37,16 +37,14 @@ public class ApartmentManagementController {
     @ApiResponses(value = {//
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied")})
-    public ResponseEntity<List<AddApartmentDTO>> getAllApartments( HttpServletRequest request) throws RuntimeException {
+    public ResponseEntity<List<Apartment>> getAllApartments( HttpServletRequest request) throws RuntimeException {
         String token = request.getHeader("Authorization");
         if (token == null || !token.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ArrayList<>());
         }
         token = token.replace("Bearer ", "");
         String username = tokenProvider.getUsernameFromToken(token);
-        List<AddApartmentDTO> apartments = apartmentRepository.findAllByUsername(username).stream()
-                .map(ApartmentMapper::mapToAddApartmentDTO) // Assuming ApartmentMapper is a class with the mapping logic
-                .collect(Collectors.toList());
+        List<Apartment> apartments = apartmentRepository.findAllByUsername(username);
         return ResponseEntity.status(HttpStatus.OK).body(apartments);
 
     }
