@@ -15,9 +15,3 @@ spring:
 
 server:
   port: 8082
-
-ApartmentManagementController:
-  addApartment: Authenticates user and returns its JWT token.
-  deleteApartment: Creates user and returns its JWT token
-  getAllApartments: Deletes specific user by username
-  getApartmentById: Returns specific user by username
